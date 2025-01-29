@@ -35,6 +35,16 @@ Partial Class frmMain
         Me.btn0 = New System.Windows.Forms.Button()
         Me.btnSignToggle = New System.Windows.Forms.Button()
         Me.btnDecimal = New System.Windows.Forms.Button()
+        Me.btnBackspace = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.btnHistory = New System.Windows.Forms.Button()
+        Me.pbxBackspace = New System.Windows.Forms.PictureBox()
+        Me.pbxHistory = New System.Windows.Forms.PictureBox()
+        Me.btnFactorial = New System.Windows.Forms.Button()
+        Me.btnPrime = New System.Windows.Forms.Button()
+        Me.txtFormer = New System.Windows.Forms.TextBox()
+        CType(Me.pbxBackspace, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn1
@@ -45,20 +55,25 @@ Partial Class frmMain
         Me.btn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn1.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn1.Location = New System.Drawing.Point(12, 169)
+        Me.btn1.Location = New System.Drawing.Point(134, 215)
         Me.btn1.Name = "btn1"
         Me.btn1.Size = New System.Drawing.Size(77, 53)
         Me.btn1.TabIndex = 0
+        Me.btn1.TabStop = False
         Me.btn1.Text = "1"
         Me.btn1.UseVisualStyleBackColor = False
         '
         'txtInput
         '
-        Me.txtInput.Location = New System.Drawing.Point(12, 53)
+        Me.txtInput.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
+        Me.txtInput.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold)
+        Me.txtInput.Location = New System.Drawing.Point(134, 34)
         Me.txtInput.Multiline = True
         Me.txtInput.Name = "txtInput"
+        Me.txtInput.ReadOnly = True
         Me.txtInput.Size = New System.Drawing.Size(243, 56)
         Me.txtInput.TabIndex = 1
+        Me.txtInput.TabStop = False
         '
         'btn2
         '
@@ -68,10 +83,11 @@ Partial Class frmMain
         Me.btn2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn2.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn2.Location = New System.Drawing.Point(95, 169)
+        Me.btn2.Location = New System.Drawing.Point(217, 215)
         Me.btn2.Name = "btn2"
         Me.btn2.Size = New System.Drawing.Size(77, 53)
         Me.btn2.TabIndex = 2
+        Me.btn2.TabStop = False
         Me.btn2.Text = "2"
         Me.btn2.UseVisualStyleBackColor = False
         '
@@ -83,10 +99,11 @@ Partial Class frmMain
         Me.btn3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn3.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn3.Location = New System.Drawing.Point(178, 169)
+        Me.btn3.Location = New System.Drawing.Point(300, 215)
         Me.btn3.Name = "btn3"
         Me.btn3.Size = New System.Drawing.Size(77, 53)
         Me.btn3.TabIndex = 3
+        Me.btn3.TabStop = False
         Me.btn3.Text = "3"
         Me.btn3.UseVisualStyleBackColor = False
         '
@@ -98,10 +115,11 @@ Partial Class frmMain
         Me.btn4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn4.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn4.Location = New System.Drawing.Point(12, 228)
+        Me.btn4.Location = New System.Drawing.Point(134, 274)
         Me.btn4.Name = "btn4"
         Me.btn4.Size = New System.Drawing.Size(77, 53)
         Me.btn4.TabIndex = 4
+        Me.btn4.TabStop = False
         Me.btn4.Text = "4"
         Me.btn4.UseVisualStyleBackColor = False
         '
@@ -113,10 +131,11 @@ Partial Class frmMain
         Me.btn5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn5.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn5.Location = New System.Drawing.Point(95, 228)
+        Me.btn5.Location = New System.Drawing.Point(217, 274)
         Me.btn5.Name = "btn5"
         Me.btn5.Size = New System.Drawing.Size(77, 53)
         Me.btn5.TabIndex = 5
+        Me.btn5.TabStop = False
         Me.btn5.Text = "5"
         Me.btn5.UseVisualStyleBackColor = False
         '
@@ -128,10 +147,11 @@ Partial Class frmMain
         Me.btn6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn6.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn6.Location = New System.Drawing.Point(178, 228)
+        Me.btn6.Location = New System.Drawing.Point(300, 274)
         Me.btn6.Name = "btn6"
         Me.btn6.Size = New System.Drawing.Size(77, 53)
         Me.btn6.TabIndex = 6
+        Me.btn6.TabStop = False
         Me.btn6.Text = "6"
         Me.btn6.UseVisualStyleBackColor = False
         '
@@ -143,10 +163,11 @@ Partial Class frmMain
         Me.btn7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn7.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn7.Location = New System.Drawing.Point(12, 287)
+        Me.btn7.Location = New System.Drawing.Point(134, 333)
         Me.btn7.Name = "btn7"
         Me.btn7.Size = New System.Drawing.Size(77, 53)
         Me.btn7.TabIndex = 7
+        Me.btn7.TabStop = False
         Me.btn7.Text = "7"
         Me.btn7.UseVisualStyleBackColor = False
         '
@@ -158,10 +179,11 @@ Partial Class frmMain
         Me.btn8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn8.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn8.Location = New System.Drawing.Point(95, 287)
+        Me.btn8.Location = New System.Drawing.Point(217, 333)
         Me.btn8.Name = "btn8"
         Me.btn8.Size = New System.Drawing.Size(77, 53)
         Me.btn8.TabIndex = 8
+        Me.btn8.TabStop = False
         Me.btn8.Text = "8"
         Me.btn8.UseVisualStyleBackColor = False
         '
@@ -173,10 +195,11 @@ Partial Class frmMain
         Me.btn9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn9.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn9.Location = New System.Drawing.Point(178, 287)
+        Me.btn9.Location = New System.Drawing.Point(300, 333)
         Me.btn9.Name = "btn9"
         Me.btn9.Size = New System.Drawing.Size(77, 53)
         Me.btn9.TabIndex = 9
+        Me.btn9.TabStop = False
         Me.btn9.Text = "9"
         Me.btn9.UseVisualStyleBackColor = False
         '
@@ -188,10 +211,11 @@ Partial Class frmMain
         Me.btn0.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btn0.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn0.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btn0.Location = New System.Drawing.Point(95, 346)
+        Me.btn0.Location = New System.Drawing.Point(217, 392)
         Me.btn0.Name = "btn0"
         Me.btn0.Size = New System.Drawing.Size(77, 53)
         Me.btn0.TabIndex = 10
+        Me.btn0.TabStop = False
         Me.btn0.Text = "0"
         Me.btn0.UseVisualStyleBackColor = False
         '
@@ -203,10 +227,11 @@ Partial Class frmMain
         Me.btnSignToggle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btnSignToggle.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSignToggle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btnSignToggle.Location = New System.Drawing.Point(12, 346)
+        Me.btnSignToggle.Location = New System.Drawing.Point(134, 392)
         Me.btnSignToggle.Name = "btnSignToggle"
         Me.btnSignToggle.Size = New System.Drawing.Size(77, 53)
         Me.btnSignToggle.TabIndex = 11
+        Me.btnSignToggle.TabStop = False
         Me.btnSignToggle.Text = "+/-"
         Me.btnSignToggle.UseVisualStyleBackColor = False
         '
@@ -218,18 +243,141 @@ Partial Class frmMain
         Me.btnDecimal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.btnDecimal.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnDecimal.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.btnDecimal.Location = New System.Drawing.Point(178, 346)
+        Me.btnDecimal.Location = New System.Drawing.Point(300, 392)
         Me.btnDecimal.Name = "btnDecimal"
         Me.btnDecimal.Size = New System.Drawing.Size(77, 53)
         Me.btnDecimal.TabIndex = 12
+        Me.btnDecimal.TabStop = False
         Me.btnDecimal.Text = "."
         Me.btnDecimal.UseVisualStyleBackColor = False
+        '
+        'btnBackspace
+        '
+        Me.btnBackspace.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.btnBackspace.FlatAppearance.BorderSize = 0
+        Me.btnBackspace.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.btnBackspace.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnBackspace.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnBackspace.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.btnBackspace.Location = New System.Drawing.Point(300, 161)
+        Me.btnBackspace.Name = "btnBackspace"
+        Me.btnBackspace.Size = New System.Drawing.Size(77, 53)
+        Me.btnBackspace.TabIndex = 15
+        Me.btnBackspace.TabStop = False
+        Me.btnBackspace.Text = "<-"
+        Me.btnBackspace.UseVisualStyleBackColor = False
+        '
+        'Button3
+        '
+        Me.Button3.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.Button3.FlatAppearance.BorderSize = 0
+        Me.Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Button3.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Button3.Location = New System.Drawing.Point(217, 161)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(77, 53)
+        Me.Button3.TabIndex = 13
+        Me.Button3.TabStop = False
+        Me.Button3.Text = "C"
+        Me.Button3.UseVisualStyleBackColor = False
+        '
+        'btnHistory
+        '
+        Me.btnHistory.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.btnHistory.FlatAppearance.BorderSize = 0
+        Me.btnHistory.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.btnHistory.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnHistory.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnHistory.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.btnHistory.Location = New System.Drawing.Point(134, 161)
+        Me.btnHistory.Name = "btnHistory"
+        Me.btnHistory.Size = New System.Drawing.Size(77, 53)
+        Me.btnHistory.TabIndex = 14
+        Me.btnHistory.TabStop = False
+        Me.btnHistory.Text = "H"
+        Me.btnHistory.UseVisualStyleBackColor = False
+        '
+        'pbxBackspace
+        '
+        Me.pbxBackspace.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.pbxBackspace.Image = Global.PrimeFactorGUI.My.Resources.Resources.icoBackspace
+        Me.pbxBackspace.Location = New System.Drawing.Point(306, 169)
+        Me.pbxBackspace.Name = "pbxBackspace"
+        Me.pbxBackspace.Size = New System.Drawing.Size(64, 36)
+        Me.pbxBackspace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbxBackspace.TabIndex = 17
+        Me.pbxBackspace.TabStop = False
+        '
+        'pbxHistory
+        '
+        Me.pbxHistory.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.pbxHistory.Image = Global.PrimeFactorGUI.My.Resources.Resources.icoHistory
+        Me.pbxHistory.Location = New System.Drawing.Point(140, 169)
+        Me.pbxHistory.Name = "pbxHistory"
+        Me.pbxHistory.Size = New System.Drawing.Size(64, 36)
+        Me.pbxHistory.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbxHistory.TabIndex = 16
+        Me.pbxHistory.TabStop = False
+        '
+        'btnFactorial
+        '
+        Me.btnFactorial.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.btnFactorial.FlatAppearance.BorderSize = 0
+        Me.btnFactorial.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.btnFactorial.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnFactorial.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFactorial.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.btnFactorial.Location = New System.Drawing.Point(259, 92)
+        Me.btnFactorial.Name = "btnFactorial"
+        Me.btnFactorial.Size = New System.Drawing.Size(118, 53)
+        Me.btnFactorial.TabIndex = 20
+        Me.btnFactorial.TabStop = False
+        Me.btnFactorial.Text = "Factorial"
+        Me.btnFactorial.UseVisualStyleBackColor = False
+        '
+        'btnPrime
+        '
+        Me.btnPrime.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.btnPrime.FlatAppearance.BorderSize = 0
+        Me.btnPrime.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.btnPrime.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnPrime.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPrime.ForeColor = System.Drawing.Color.FromArgb(CType(CType(250, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.btnPrime.Location = New System.Drawing.Point(134, 92)
+        Me.btnPrime.Name = "btnPrime"
+        Me.btnPrime.Size = New System.Drawing.Size(119, 53)
+        Me.btnPrime.TabIndex = 18
+        Me.btnPrime.TabStop = False
+        Me.btnPrime.Text = "Prime"
+        Me.btnPrime.UseVisualStyleBackColor = False
+        '
+        'txtFormer
+        '
+        Me.txtFormer.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
+        Me.txtFormer.Font = New System.Drawing.Font("Century Gothic", 14.25!, System.Drawing.FontStyle.Bold)
+        Me.txtFormer.Location = New System.Drawing.Point(134, 7)
+        Me.txtFormer.Multiline = True
+        Me.txtFormer.Name = "txtFormer"
+        Me.txtFormer.ReadOnly = True
+        Me.txtFormer.Size = New System.Drawing.Size(243, 25)
+        Me.txtFormer.TabIndex = 21
+        Me.txtFormer.TabStop = False
         '
         'frmMain
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(383, 433)
+        Me.ClientSize = New System.Drawing.Size(383, 465)
+        Me.Controls.Add(Me.txtFormer)
+        Me.Controls.Add(Me.btnFactorial)
+        Me.Controls.Add(Me.btnPrime)
+        Me.Controls.Add(Me.pbxBackspace)
+        Me.Controls.Add(Me.pbxHistory)
+        Me.Controls.Add(Me.btnBackspace)
+        Me.Controls.Add(Me.btnHistory)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.btnDecimal)
         Me.Controls.Add(Me.btnSignToggle)
         Me.Controls.Add(Me.btn0)
@@ -248,6 +396,8 @@ Partial Class frmMain
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "PrimeFactorGUI"
+        CType(Me.pbxBackspace, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -266,4 +416,12 @@ Partial Class frmMain
     Friend WithEvents btn0 As Button
     Friend WithEvents btnSignToggle As Button
     Friend WithEvents btnDecimal As Button
+    Friend WithEvents btnBackspace As Button
+    Friend WithEvents btnHistory As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents pbxHistory As PictureBox
+    Friend WithEvents pbxBackspace As PictureBox
+    Friend WithEvents btnFactorial As Button
+    Friend WithEvents btnPrime As Button
+    Friend WithEvents txtFormer As TextBox
 End Class
