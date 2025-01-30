@@ -1,248 +1,289 @@
 ﻿Imports System.Drawing
-Imports System.Numerics ' Import the BigInteger namespace
+Imports System.Numerics
+Imports System.ComponentModel
 
 Public Class frmMain
-    Private DefaultFontSize As Single = 24 ' Default font size for txtInput
+    Private DefaultFontSize As Single = 24
     Private isPrimeToggled As Boolean = False
     Private isFactorialToggled As Boolean = False
+    Private factorialCache As New Dictionary(Of Integer, BigInteger)()
+    Private primeWorker As BackgroundWorker = New BackgroundWorker()
+    Private lastProcessedInput As String = String.Empty
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.ActiveControl = txtInput ' Ensures txtInput is ready for typing
-        txtInput.Font = New Font(txtInput.Font.FontFamily, DefaultFontSize, FontStyle.Bold) ' Set default font size
+        Me.ActiveControl = txtInput
+        txtInput.Font = New Font(txtInput.Font.FontFamily, DefaultFontSize, FontStyle.Bold)
+        InitializeFactorialCache()
+        ConfigureBackgroundWorker()
     End Sub
 
-    ' Event handler for number buttons
+    '=============== UI HANDLERS ===============
     Private Sub NumberButton_Click(sender As Object, e As EventArgs) Handles btn0.Click, btn1.Click, btn2.Click, btn3.Click, btn4.Click, btn5.Click, btn6.Click, btn7.Click, btn8.Click, btn9.Click
-        Dim btn As Button = CType(sender, Button) ' Identify which button was clicked
-        txtInput.Text &= btn.Text ' Append the button text (number) to the textbox
-        AdjustFontSize() ' Adjust font size dynamically
+        Dim btn As Button = CType(sender, Button)
+        txtInput.Text &= btn.Text
+        ThrottledAdjustFontSize()
         txtInput.SelectionStart = txtInput.Text.Length
-        txtInput.SelectionLength = 0
         txtInput.Focus()
     End Sub
 
-    ' Event handler for sign toggle (+/-)
-    Private Sub btnSignToggle_Click(sender As Object, e As EventArgs)
-        If txtInput.Text.StartsWith("-") Then
-            txtInput.Text = txtInput.Text.Substring(1) ' Remove the negative sign
-        ElseIf txtInput.Text.Length > 0 Then
-            txtInput.Text = "-" & txtInput.Text ' Add a negative sign
-        End If
-        AdjustFontSize()
-    End Sub
-
-    ' Event handler for Backspace button
     Private Sub btnBackspace_Click(sender As Object, e As EventArgs) Handles btnBackspace.Click
         If txtInput.Text.Length > 0 Then
-            txtInput.Text = txtInput.Text.Substring(0, txtInput.Text.Length - 1) ' Remove last character
-            AdjustFontSize()
+            txtInput.Text = txtInput.Text.Substring(0, txtInput.Text.Length - 1)
+            ThrottledAdjustFontSize()
         End If
     End Sub
 
-    ' Event handler for clear button
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        txtInput.Clear() ' Clear input textbox
-        txtAnswer.Clear() ' Clear answer textbox
-        txtInput.Font = New Font(txtInput.Font.FontFamily, DefaultFontSize, FontStyle.Bold) ' Reset font size
+        txtInput.Clear()
+        txtAnswer.Clear()
+        txtInput.Font = New Font(txtInput.Font.FontFamily, DefaultFontSize, FontStyle.Bold)
     End Sub
 
-    ' Adjust the font size dynamically based on text length
-    Private Sub AdjustFontSize()
-        Dim graphics As Graphics = txtInput.CreateGraphics()
-        Dim textSize As SizeF = graphics.MeasureString(txtInput.Text, txtInput.Font)
-        graphics.Dispose()
-
-        Dim maxFontSize As Single = DefaultFontSize
-        Dim minFontSize As Single = 10 ' Minimum font size
-
-        ' Reduce font size if text is wider than textbox
-        While textSize.Width > txtInput.Width AndAlso txtInput.Font.Size > minFontSize
-            txtInput.Font = New Font(txtInput.Font.FontFamily, txtInput.Font.Size - 1, FontStyle.Bold)
-            textSize = TextRenderer.MeasureText(txtInput.Text, txtInput.Font)
-        End While
-
-        ' Increase font size back if there is space
-        While textSize.Width < txtInput.Width AndAlso txtInput.Font.Size < maxFontSize
-            txtInput.Font = New Font(txtInput.Font.FontFamily, txtInput.Font.Size + 1, FontStyle.Bold)
-            textSize = TextRenderer.MeasureText(txtInput.Text, txtInput.Font)
-        End While
-    End Sub
-
-    ' Trigger font adjustment when text changes
-    Private Sub txtInput_TextChanged(sender As Object, e As EventArgs) Handles txtInput.TextChanged
-        ' Only update if the input is a valid number
-        Dim input As String = txtInput.Text
-        If IsNumeric(input) AndAlso input.Length > 0 Then
-            If isPrimeToggled Then
-                CalculatePrime(input)
-            ElseIf isFactorialToggled Then
-                CalculateFactorial(input)
-            End If
-        Else
-            txtAnswer.Clear() ' Clear answer if input is invalid
-        End If
-    End Sub
-
-    Private Sub txtInput_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtInput.KeyPress
-        ' Allow only digits (0-9), backspace, and the minus sign (for negative numbers)
-        If Not Char.IsDigit(e.KeyChar) AndAlso e.KeyChar <> ControlChars.Back AndAlso e.KeyChar <> "-" Then
-            e.Handled = True ' Suppress the keypress
-        End If
-
-        ' Allow only one minus sign at the beginning of the input
-        If e.KeyChar = "-" AndAlso (txtInput.SelectionStart <> 0 OrElse txtInput.Text.Contains("-")) Then
-            e.Handled = True ' Suppress the keypress
-        End If
-    End Sub
-
-    Private Sub Button_MouseEnter(sender As Object, e As EventArgs) Handles btn0.MouseEnter, btn1.MouseEnter, btn2.MouseEnter, btn3.MouseEnter, btn4.MouseEnter, btn5.MouseEnter, btn6.MouseEnter, btn7.MouseEnter, btn8.MouseEnter, btn9.MouseEnter, btnClear.MouseEnter, btnBackspace.MouseEnter
-        Dim btn As Button = CType(sender, Button)
-        btn.BackColor = Color.FromArgb(45, 45, 45) ' Hover effect
-    End Sub
-
-    Private Sub Button_MouseLeave(sender As Object, e As EventArgs) Handles btn0.MouseLeave, btn1.MouseLeave, btn2.MouseLeave, btn3.MouseLeave, btn4.MouseLeave, btn5.MouseLeave, btn6.MouseLeave, btn7.MouseLeave, btn8.MouseLeave, btn9.MouseLeave, btnClear.MouseLeave, btnBackspace.MouseLeave
-        Dim btn As Button = CType(sender, Button)
-        btn.BackColor = Color.FromArgb(59, 59, 59) ' Revert to default color when mouse leaves
-    End Sub
-
-    Private Sub Button_MouseDown(sender As Object, e As MouseEventArgs) Handles btn0.MouseDown, btn1.MouseDown, btn2.MouseDown, btn3.MouseDown, btn4.MouseDown, btn5.MouseDown, btn6.MouseDown, btn7.MouseDown, btn8.MouseDown, btn9.MouseDown, btnClear.MouseDown, btnBackspace.MouseDown
-        Dim btn As Button = CType(sender, Button)
-        btn.BackColor = Color.FromArgb(30, 30, 30) ' Pressed effect
-    End Sub
-
-    Private Sub Button_MouseUp(sender As Object, e As MouseEventArgs) Handles btn0.MouseUp, btn1.MouseUp, btn2.MouseUp, btn3.MouseUp, btn4.MouseUp, btn5.MouseUp, btn6.MouseUp, btn7.MouseUp, btn8.MouseUp, btn9.MouseUp, btnClear.MouseUp, btnBackspace.MouseUp
-        Dim btn As Button = CType(sender, Button)
-        btn.BackColor = Color.FromArgb(45, 45, 45) ' Revert to hover color after release
-    End Sub
-
-    ' Event handler for Prime Calculation button
-    Private Sub btnPrime_Click(sender As Object, e As EventArgs) Handles btnPrime.Click
-        ' Deselect Factorial button if it was selected
-        If isFactorialToggled Then
-            isFactorialToggled = False
-            txtAnswer.Clear()
-            txtInput.Clear() ' Clear textboxes when switching functions
-        End If
-
-        ' Toggle the Prime button's state
-        isPrimeToggled = Not isPrimeToggled
-        ToggleButtonBackground()
-
-        ' Trigger the calculation immediately if Prime is toggled
-        If isPrimeToggled Then
-            txtInput_TextChanged(sender, e)
-        End If
-        txtInput.Focus()
-    End Sub
-
-    ' Event handler for Factorial Calculation button
-    Private Sub btnFactorial_Click(sender As Object, e As EventArgs) Handles btnFactorial.Click
-        ' Deselect Prime button if it was selected
-        If isPrimeToggled Then
-            isPrimeToggled = False
-            txtAnswer.Clear()
-            txtInput.Clear() ' Clear textboxes when switching functions
-        End If
-
-        ' Toggle the Factorial button's state
-        isFactorialToggled = Not isFactorialToggled
-        ToggleButtonBackground()
-
-        ' Trigger the calculation immediately if Factorial is toggled
-        If isFactorialToggled Then
-            txtInput_TextChanged(sender, e)
-        End If
-        txtInput.Focus()
-    End Sub
-
-    ' Toggle button background color based on selection
-    Private Sub ToggleButtonBackground()
-        ' Reset both buttons to their default colors
-        btnPrime.BackColor = Color.FromArgb(59, 59, 59) ' Default color for Prime button
-        btnFactorial.BackColor = Color.FromArgb(59, 59, 59) ' Default color for Factorial button
-
-        ' Darken the background of the toggled button
-        If isPrimeToggled Then
-            btnPrime.BackColor = Color.FromArgb(30, 30, 30) ' Darkened color for Prime button
-        ElseIf isFactorialToggled Then
-            btnFactorial.BackColor = Color.FromArgb(30, 30, 30) ' Darkened color for Factorial button
-        End If
-    End Sub
-
-    ' Function to check if a number is prime
+    '=============== CORE FUNCTIONALITY ===============
     Private Sub CalculatePrime(input As String)
-        If IsNumeric(input) Then
-            Try
-                Dim num As BigInteger = BigInteger.Parse(input)
-                If num > 1 Then
-                    If IsPrime(num) Then
-                        txtAnswer.Text = "= Prime"
-                    Else
-                        txtAnswer.Text = "= Not Prime"
-                    End If
-                Else
-                    txtAnswer.Text = "= Not Prime"
-                End If
-            Catch ex As OverflowException
-                txtAnswer.Text = "= Number too large"
-            End Try
+        If input = lastProcessedInput Then Exit Sub
+        lastProcessedInput = input
+
+        If Not IsNumeric(input) Then
+            txtAnswer.Text = "= Invalid Input"
+            Return
         End If
+
+        Try
+            Dim num As BigInteger = BigInteger.Parse(input)
+            If primeWorker.IsBusy Then primeWorker.CancelAsync()
+            primeWorker.RunWorkerAsync(num)
+        Catch ex As OverflowException
+            txtAnswer.Text = "= Number too large"
+        End Try
     End Sub
 
-    ' Function to calculate factorial
     Private Sub CalculateFactorial(input As String)
-        If IsNumeric(input) Then
-            Dim num As Integer = CInt(input)
+        If Not IsNumeric(input) Then
+            txtAnswer.Text = "= Invalid Input"
+            Return
+        End If
+
+        Dim num As Integer
+        If Integer.TryParse(input, num) Then
             If num >= 0 AndAlso num <= 10000 Then
-                txtAnswer.Text = "= " & Factorial(num).ToString()
+                txtAnswer.Text = "= " & GetFactorial(num).ToString()
             ElseIf num > 10000 Then
                 txtAnswer.Text = "= Number too large"
             Else
                 txtAnswer.Text = "= Invalid Input"
             End If
+        Else
+            txtAnswer.Text = "= Invalid Input"
         End If
     End Sub
 
-    ' Function to check if a number is prime
-    Private Function IsPrime(ByVal num As BigInteger) As Boolean
-        If num < 2 Then
-            Return False
-        End If
-        For i As BigInteger = 2 To BigIntegerSqrt(num)
-            If num Mod i = 0 Then
-                Return False
-            End If
+    '=============== OPTIMIZED ALGORITHMS ===============
+    Private Function IsPrime(num As BigInteger) As Boolean
+        If num < 2 Then Return False
+        If num = 2 OrElse num = 3 Then Return True
+        If num Mod 2 = 0 OrElse num Mod 3 = 0 Then Return False
+
+        Dim sqrtNum As BigInteger = BigIntegerSqrt(num)
+        For i As BigInteger = 5 To sqrtNum Step 6
+            If num Mod i = 0 OrElse num Mod (i + 2) = 0 Then Return False
+            If primeWorker.CancellationPending Then Return False
         Next
         Return True
     End Function
 
-    ' Function to calculate factorial
-    Private Function Factorial(ByVal num As Integer) As BigInteger
-        If num = 0 Then
-            Return 1
-        End If
-        Dim result As BigInteger = 1
-        For i As Integer = 1 To num
+    Private Function GetFactorial(num As Integer) As BigInteger
+        If factorialCache.ContainsKey(num) Then Return factorialCache(num)
+
+        Dim result As BigInteger = factorialCache.Values.Last()
+        For i As Integer = factorialCache.Keys.Max() + 1 To num
             result *= i
+            factorialCache(i) = result
         Next
         Return result
     End Function
 
+    '=============== HELPER METHODS ===============
+    Private Sub InitializeFactorialCache()
+        factorialCache.Clear()
+        factorialCache.Add(0, 1)
+        factorialCache.Add(1, 1)
+    End Sub
+
+    Private Sub ConfigureBackgroundWorker()
+        AddHandler primeWorker.DoWork, AddressOf PrimeWorker_DoWork
+        AddHandler primeWorker.RunWorkerCompleted, AddressOf PrimeWorker_Completed
+        primeWorker.WorkerSupportsCancellation = True
+    End Sub
+
+    Private Sub ThrottledAdjustFontSize()
+        Static lastUpdate As DateTime = DateTime.MinValue
+        If (DateTime.Now - lastUpdate).TotalMilliseconds < 100 Then Exit Sub
+        lastUpdate = DateTime.Now
+        AdjustFontSize()
+    End Sub
+
+    Private Sub AdjustFontSize()
+        Dim currentFont = txtInput.Font
+        Dim newSize = CalculateOptimalFontSize(txtInput.Text, txtInput.Width, currentFont)
+        If newSize <> currentFont.Size Then
+            txtInput.Font = New Font(currentFont.FontFamily, newSize, FontStyle.Bold)
+        End If
+    End Sub
+
+    Private Function CalculateOptimalFontSize(text As String, width As Integer, font As Font) As Single
+        Using g = txtInput.CreateGraphics()
+            Dim size = g.MeasureString(text, font)
+            If size.Width <= width Then Return Math.Min(font.Size + 1, DefaultFontSize)
+
+            Dim minSize As Single = 10
+            Dim currentSize As Single = font.Size
+            While currentSize > minSize
+                currentSize -= 1
+                size = g.MeasureString(text, New Font(font.FontFamily, currentSize, FontStyle.Bold))
+                If size.Width <= width Then Return currentSize
+            End While
+            Return minSize
+        End Using
+    End Function
+
     Private Function BigIntegerSqrt(n As BigInteger) As BigInteger
-        If n < 0 Then
-            Throw New ArgumentException("Cannot compute square root of a negative number.")
-        End If
-        If n = 0 OrElse n = 1 Then
-            Return n
-        End If
+        If n < 0 Then Throw New ArgumentException("Negative number")
+        If n < 2 Then Return n
 
         Dim x As BigInteger = n
-        Dim y As BigInteger = (x + 1) / 2
+        Dim y As BigInteger = (x + 1) >> 1
         While y < x
             x = y
-            y = (x + (n / x)) / 2
+            y = (x + n / x) >> 1
         End While
         Return x
     End Function
 
+    '=============== BACKGROUND WORKER ===============
+    Private Sub PrimeWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+        Dim num As BigInteger = CType(e.Argument, BigInteger)
+        e.Result = If(num < 2, False, IsPrime(num))
+    End Sub
+
+    Private Sub PrimeWorker_Completed(sender As Object, e As RunWorkerCompletedEventArgs)
+        If e.Error IsNot Nothing Then
+            txtAnswer.Text = "= Calculation Error"
+        ElseIf Not e.Cancelled Then
+            txtAnswer.Text = If(CType(e.Result, Boolean), "= Prime", "= Not Prime")
+        End If
+    End Sub
+
+    '=============== EVENT HANDLERS ===============
+
+    Private Sub txtInput_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtInput.KeyPress
+        ' Allow only digits (0-9), backspace, and minus
+        If Not Char.IsDigit(e.KeyChar) AndAlso
+       e.KeyChar <> ControlChars.Back AndAlso
+       e.KeyChar <> "-" Then
+            e.Handled = True
+        End If
+
+        ' Restrict minus sign to first position
+        If e.KeyChar = "-" AndAlso
+       (txtInput.SelectionStart <> 0 OrElse
+       txtInput.Text.Contains("-")) Then
+            e.Handled = True
+        End If
+    End Sub
+    Private Sub txtInput_TextChanged(sender As Object, e As EventArgs) Handles txtInput.TextChanged
+        Dim input = txtInput.Text
+        ' Remove any invalid characters that might have been pasted
+        If System.Text.RegularExpressions.Regex.IsMatch(txtInput.Text, "[^0-9-]") Then
+            txtInput.Text = System.Text.RegularExpressions.Regex.Replace(txtInput.Text, "[^0-9-]", "")
+            txtInput.SelectionStart = txtInput.Text.Length
+        End If
+        If String.IsNullOrEmpty(input) Then
+            txtAnswer.Clear()
+            Return
+        End If
+
+        If isPrimeToggled Then
+            CalculatePrime(input)
+        ElseIf isFactorialToggled Then
+            CalculateFactorial(input)
+        End If
+    End Sub
+
+    '=============== BUTTON TOGGLES ===============
+    Private Sub ToggleFunctionButton(ByRef currentToggle As Boolean, ByRef otherToggle As Boolean)
+        ' Clear previous function
+        If otherToggle Then
+            otherToggle = False
+            txtAnswer.Clear()
+            txtInput.Clear()
+        End If
+
+        ' Toggle current function
+        currentToggle = Not currentToggle
+        UpdateButtonColors()
+    End Sub
+
+    Private Sub UpdateButtonColors()
+        btnPrime.BackColor = If(isPrimeToggled, Color.FromArgb(30, 30, 30), Color.FromArgb(59, 59, 59))
+        btnFactorial.BackColor = If(isFactorialToggled, Color.FromArgb(30, 30, 30), Color.FromArgb(59, 59, 59))
+    End Sub
+
+    Private Sub btnPrime_Click(sender As Object, e As EventArgs) Handles btnPrime.Click
+        ToggleFunctionButton(isPrimeToggled, isFactorialToggled)
+        If isPrimeToggled Then txtInput_TextChanged(Nothing, Nothing)
+        txtInput.Focus()
+    End Sub
+
+    Private Sub btnFactorial_Click(sender As Object, e As EventArgs) Handles btnFactorial.Click
+        ToggleFunctionButton(isFactorialToggled, isPrimeToggled)
+        If isFactorialToggled Then txtInput_TextChanged(Nothing, Nothing)
+        txtInput.Focus()
+    End Sub
+
+    '=============== MOUSE EVENT HANDLERS ===============
+    Private Sub Button_MouseEnter(sender As Object, e As EventArgs) Handles _
+    btn0.MouseEnter, btn1.MouseEnter, btn2.MouseEnter, btn3.MouseEnter, btn4.MouseEnter,
+    btn5.MouseEnter, btn6.MouseEnter, btn7.MouseEnter, btn8.MouseEnter, btn9.MouseEnter,
+    btnClear.MouseEnter, btnBackspace.MouseEnter, btnPrime.MouseEnter, btnFactorial.MouseEnter
+
+        Dim btn = CType(sender, Button)
+        If ShouldIgnoreHover(btn) Then Exit Sub
+        btn.BackColor = Color.FromArgb(45, 45, 45)
+    End Sub
+
+    Private Sub Button_MouseLeave(sender As Object, e As EventArgs) Handles _
+    btn0.MouseLeave, btn1.MouseLeave, btn2.MouseLeave, btn3.MouseLeave, btn4.MouseLeave,
+    btn5.MouseLeave, btn6.MouseLeave, btn7.MouseLeave, btn8.MouseLeave, btn9.MouseLeave,
+    btnClear.MouseLeave, btnBackspace.MouseLeave, btnPrime.MouseLeave, btnFactorial.MouseLeave
+
+        Dim btn = CType(sender, Button)
+        If ShouldIgnoreHover(btn) Then Exit Sub
+        btn.BackColor = Color.FromArgb(59, 59, 59)
+    End Sub
+
+    Private Sub Button_MouseDown(sender As Object, e As MouseEventArgs) Handles _
+    btn0.MouseDown, btn1.MouseDown, btn2.MouseDown, btn3.MouseDown, btn4.MouseDown,
+    btn5.MouseDown, btn6.MouseDown, btn7.MouseDown, btn8.MouseDown, btn9.MouseDown,
+    btnClear.MouseDown, btnBackspace.MouseDown, btnPrime.MouseDown, btnFactorial.MouseDown
+
+        Dim btn = CType(sender, Button)
+        If ShouldIgnoreHover(btn) Then Exit Sub
+        btn.BackColor = Color.FromArgb(30, 30, 30)
+    End Sub
+
+    Private Sub Button_MouseUp(sender As Object, e As MouseEventArgs) Handles _
+    btn0.MouseUp, btn1.MouseUp, btn2.MouseUp, btn3.MouseUp, btn4.MouseUp,
+    btn5.MouseUp, btn6.MouseUp, btn7.MouseUp, btn8.MouseUp, btn9.MouseUp,
+    btnClear.MouseUp, btnBackspace.MouseUp, btnPrime.MouseUp, btnFactorial.MouseUp
+
+        Dim btn = CType(sender, Button)
+        If ShouldIgnoreHover(btn) Then Exit Sub
+        btn.BackColor = Color.FromArgb(45, 45, 45)
+    End Sub
+
+    Private Function ShouldIgnoreHover(btn As Button) As Boolean
+        Return (btn Is btnPrime AndAlso isPrimeToggled) OrElse
+           (btn Is btnFactorial AndAlso isFactorialToggled)
+    End Function
 End Class
