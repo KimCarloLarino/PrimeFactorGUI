@@ -74,6 +74,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigIntegerMath.vb" />
+    <Compile Include="Calculator.vb" />
+    <Compile Include="FactorialCalculator.vb" />
     <Compile Include="frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +100,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PrimeChecker.vb" />
+    <Compile Include="UIHelper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmMain.resx">
@@ -120,9 +125,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="icoHistory.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icoBackspace.png" />
